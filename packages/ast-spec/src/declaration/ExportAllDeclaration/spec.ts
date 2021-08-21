@@ -6,6 +6,8 @@ import type { ExportKind } from '../ExportAndImportKind';
 
 export interface ExportAllDeclaration extends BaseNode {
   type: AST_NODE_TYPES.ExportAllDeclaration;
+  // this should only be a non-null StringLiteral, but TS's error permissiveness allows Expression
+  // we should address this when we add parser errors.
   source: Expression | null;
   exportKind: ExportKind;
   exported: Identifier | null;
