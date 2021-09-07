@@ -1,4 +1,4 @@
-import { TSESTree } from '@typescript-eslint/typescript-estree';
+import type { TSESTree } from '../typescript-estree-import';
 import { NewPlugin } from 'pretty-format';
 import { AST_NODE_TYPES } from '../../../src';
 

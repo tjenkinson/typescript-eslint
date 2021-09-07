@@ -1,4 +1,4 @@
-import { parse, TSESTree } from '@typescript-eslint/typescript-estree';
+import { parse, TSESTree } from '../typescript-estree-import';
 import { Fixture, ParserResponse } from './parser-types';
 
 export function parseTSESTree(

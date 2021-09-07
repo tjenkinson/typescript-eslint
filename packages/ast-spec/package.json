@@ -47,7 +47,6 @@
     "@babel/parser": "*",
     "@microsoft/api-extractor": "^7.15.2",
     "@types/babel__core": "*",
-    "@typescript-eslint/typescript-estree": "4.25.0",
     "glob": "*",
     "jest-diff": "*",
     "jest-snapshot": "*",
