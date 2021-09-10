@@ -8,6 +8,7 @@ export interface Fixture {
   readonly absolute: string;
   readonly name: string;
   readonly ext: string;
+  readonly isError: boolean;
   readonly isJSX: boolean;
   readonly relative: string;
   readonly segments: string[];

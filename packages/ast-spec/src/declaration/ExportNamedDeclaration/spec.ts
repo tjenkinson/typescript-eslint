@@ -7,6 +7,7 @@ import type { ExportKind } from '../ExportAndImportKind';
 
 export interface ExportNamedDeclaration extends BaseNode {
   type: AST_NODE_TYPES.ExportNamedDeclaration;
+  // TODO(error handling) - ClassExpression is not valid here
   declaration: ExportDeclaration | null;
   specifiers: ExportSpecifier[];
   source: Expression | null;

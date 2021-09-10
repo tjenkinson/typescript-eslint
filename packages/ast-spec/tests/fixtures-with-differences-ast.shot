@@ -2,9 +2,15 @@
 
 exports[`AST Fixtures List fixtures with AST differences 1`] = `
 Set {
-  "src/declaration/ClassDeclaration/fixtures/implementsMany/fixture.ts",
-  "src/declaration/ClassDeclaration/fixtures/implementsOne/fixture.ts",
-  "src/declaration/ClassDeclaration/fixtures/typeParameters/fixture.ts",
-  "src/declaration/ClassDeclaration/fixtures/typeParametersExtendsTypeParameters/fixture.ts",
+  "declaration/ClassDeclaration/fixtures/implements-many/fixture.ts",
+  "declaration/ClassDeclaration/fixtures/implements-one/fixture.ts",
+  "declaration/ClassDeclaration/fixtures/type-parameters-extends-type-parameters/fixture.ts",
+  "declaration/ClassDeclaration/fixtures/type-parameters/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/aliased/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/declare-function/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/identifier-braced/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/identifier-many/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/interface/fixture.ts",
+  "declaration/ExportNamedDeclaration/fixtures/type-alias/fixture.ts",
 }
 `;

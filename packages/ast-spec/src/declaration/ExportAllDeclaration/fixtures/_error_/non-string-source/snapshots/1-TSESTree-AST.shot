@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AST Fixtures declaration ExportAllDeclaration _error_ non-string-source TSESTree - AST 1`] = `
+Program {
+  type: "Program",
+  body: Array [
+    ExportAllDeclaration {
+      type: "ExportAllDeclaration",
+      exported: null,
+      exportKind: "value",
+      source: Identifier {
+        type: "Identifier",
+        name: "module",
+
+        range: [14, 20],
+        loc: {
+          start: { column: 14, line: 1 },
+          end: { column: 20, line: 1 },
+        },
+      },
+
+      range: [0, 21],
+      loc: {
+        start: { column: 0, line: 1 },
+        end: { column: 21, line: 1 },
+      },
+    },
+  ],
+  sourceType: "module",
+
+  range: [0, 22],
+  loc: {
+    start: { column: 0, line: 1 },
+    end: { column: 0, line: 2 },
+  },
+}
+`;

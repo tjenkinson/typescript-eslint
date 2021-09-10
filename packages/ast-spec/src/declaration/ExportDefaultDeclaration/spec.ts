@@ -7,7 +7,7 @@ import type { ExportKind } from '../ExportAndImportKind';
 export interface ExportDefaultDeclaration extends BaseNode {
   type: AST_NODE_TYPES.ExportDefaultDeclaration;
   declaration:
-    | // TODO - the following are disallowed syntactically, but allowed by TS error recovery:
+    | // TODO(error handling) - the following are disallowed syntactically, but allowed by TS error recovery:
     // TSEnumDeclaration, TSModuleDeclaration, TSTypeAliasDeclaration, VariableDeclaration
     ExportDeclaration
     | Expression;

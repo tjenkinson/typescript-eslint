@@ -18,10 +18,21 @@ const ONLY = [].join(path.sep);
 
 const fixturesWithASTDifferences = new Set<string>();
 const fixturesWithTokenDifferences = new Set<string>();
+enum ErrorLabel {
+  TSESTree = "TSESTree errored but Babel didn't",
+  Babel = "Babel errored but TSESTree didn't",
+  Both = 'Both errored',
+}
+const fixturesWithErrorDifferences = {
+  [ErrorLabel.TSESTree]: new Set<string>(),
+  [ErrorLabel.Babel]: new Set<string>(),
+} as const;
 
-const fixtures: readonly Fixture[] = glob
-  .sync(`${SRC_DIR}/**/fixtures/*/*.{ts,tsx}`)
-  .map(absolute => {
+const validFixtures = glob.sync(`${SRC_DIR}/**/fixtures/*/*.{ts,tsx}`);
+const errorFixtures = glob.sync(`${SRC_DIR}/**/fixtures/_error_/*/*.{ts,tsx}`);
+
+const fixtures: readonly Fixture[] = [...validFixtures, ...errorFixtures].map(
+  absolute => {
     const relativeToSrc = path.relative(SRC_DIR, absolute);
     const { dir, ext } = path.parse(relativeToSrc);
     const segments = dir.split(path.sep).filter(s => s !== 'fixtures');
@@ -31,8 +42,9 @@ const fixtures: readonly Fixture[] = glob
       absolute,
       name,
       ext,
+      isError: absolute.includes('/_error_/'),
       isJSX: ext.endsWith('x'),
-      relative: path.relative(PACKAGE_ROOT, absolute),
+      relative: path.relative(SRC_DIR, absolute),
       segments,
       snapshotPath,
       snapshotFiles: {
@@ -53,7 +65,12 @@ const fixtures: readonly Fixture[] = glob
         },
       },
     };
-  });
+  },
+);
+
+function isError(e: unknown): e is { code: unknown } {
+  return typeof e === 'object' && e != null && 'code' in e;
+}
 
 function nestDescribe(fixture: Fixture, segments = fixture.segments): void {
   if (segments.length > 0) {
@@ -67,7 +84,7 @@ function nestDescribe(fixture: Fixture, segments = fixture.segments): void {
       try {
         makeDir.sync(fixture.snapshotPath);
       } catch (e) {
-        if ('code' in e && e.code === 'EEXIST') {
+        if (isError(e) && e.code === 'EEXIST') {
           // already exists - ignored
         } else {
           throw e;
@@ -108,36 +125,56 @@ function nestDescribe(fixture: Fixture, segments = fixture.segments): void {
         );
       });
 
-      it('AST Alignment - AST', () => {
-        const diffResult = snapshotDiff(
-          'TSESTree',
-          tsestreeParsed.ast,
-          'Babel',
-          babelParsed.ast,
-        );
-        expect(diffResult).toMatchSpecificSnapshot(
-          fixture.snapshotFiles.alignment.ast,
-        );
+      if (fixture.isError) {
+        it('Error Alignment', () => {
+          const babelError = babelParsed.error === 'NO ERROR';
+          const tsestreeError = tsestreeParsed.error === 'NO ERROR';
 
-        if (diffHasChanges(diffResult)) {
-          fixturesWithASTDifferences.add(fixture.relative);
-        }
-      });
-      it('AST Alignment - Token', () => {
-        const diffResult = snapshotDiff(
-          'TSESTree',
-          tsestreeParsed.tokens,
-          'Babel',
-          babelParsed.tokens,
-        );
-        expect(diffResult).toMatchSpecificSnapshot(
-          fixture.snapshotFiles.alignment.tokens,
-        );
+          let result: ErrorLabel;
+          if (!babelError && tsestreeError) {
+            result = ErrorLabel.TSESTree;
+          } else if (babelError && !tsestreeError) {
+            result = ErrorLabel.Babel;
+          } else {
+            result = ErrorLabel.Both;
+          }
 
-        if (diffHasChanges(diffResult)) {
-          fixturesWithTokenDifferences.add(fixture.relative);
-        }
-      });
+          if (result !== ErrorLabel.Both) {
+            fixturesWithErrorDifferences[result].add(fixture.relative);
+          }
+        });
+      } else {
+        it('AST Alignment - AST', () => {
+          const diffResult = snapshotDiff(
+            'TSESTree',
+            tsestreeParsed.ast,
+            'Babel',
+            babelParsed.ast,
+          );
+          expect(diffResult).toMatchSpecificSnapshot(
+            fixture.snapshotFiles.alignment.ast,
+          );
+
+          if (diffHasChanges(diffResult)) {
+            fixturesWithASTDifferences.add(fixture.relative);
+          }
+        });
+        it('AST Alignment - Token', () => {
+          const diffResult = snapshotDiff(
+            'TSESTree',
+            tsestreeParsed.tokens,
+            'Babel',
+            babelParsed.tokens,
+          );
+          expect(diffResult).toMatchSpecificSnapshot(
+            fixture.snapshotFiles.alignment.tokens,
+          );
+
+          if (diffHasChanges(diffResult)) {
+            fixturesWithTokenDifferences.add(fixture.relative);
+          }
+        });
+      }
     };
 
     if ([...fixture.segments, fixture.name].join(path.sep) === ONLY) {
@@ -161,6 +198,11 @@ describe('AST Fixtures', () => {
   it('List fixtures with Token differences', () => {
     expect(fixturesWithTokenDifferences).toMatchSpecificSnapshot(
       path.resolve(__dirname, 'fixtures-with-differences-tokens.shot'),
+    );
+  });
+  it('List fixtures with Error differences', () => {
+    expect(fixturesWithErrorDifferences).toMatchSpecificSnapshot(
+      path.resolve(__dirname, 'fixtures-with-differences-errors.shot'),
     );
   });
 });
