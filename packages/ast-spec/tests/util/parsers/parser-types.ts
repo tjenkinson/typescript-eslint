@@ -1,7 +1,6 @@
-interface SnapshotPaths {
+interface SuccessSnapshotPaths {
   readonly ast: string;
   readonly tokens: string;
-  readonly error: string;
 }
 
 export interface Fixture {
@@ -14,9 +13,16 @@ export interface Fixture {
   readonly segments: string[];
   readonly snapshotPath: string;
   readonly snapshotFiles: {
-    readonly tsestree: SnapshotPaths;
-    readonly babel: SnapshotPaths;
-    readonly alignment: SnapshotPaths;
+    readonly success: {
+      readonly tsestree: SuccessSnapshotPaths;
+      readonly babel: SuccessSnapshotPaths;
+      readonly alignment: SuccessSnapshotPaths;
+    };
+    readonly error: {
+      readonly tsestree: string;
+      readonly babel: string;
+      readonly alignment: string;
+    };
   };
 }
 
