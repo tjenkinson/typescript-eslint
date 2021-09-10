@@ -55,12 +55,12 @@ const fixtures: readonly Fixture[] = [...validFixtures, ...errorFixtures].map(
             tokens: path.join(snapshotPath, '2-TSESTree-Tokens.shot'),
           },
           babel: {
-            ast: path.join(snapshotPath, '4-Babel-AST.shot'),
-            tokens: path.join(snapshotPath, '5-Babel-Tokens.shot'),
+            ast: path.join(snapshotPath, '3-Babel-AST.shot'),
+            tokens: path.join(snapshotPath, '4-Babel-Tokens.shot'),
           },
           alignment: {
-            ast: path.join(snapshotPath, '7-AST-Alignment-AST.shot'),
-            tokens: path.join(snapshotPath, '8-AST-Alignment-Tokens.shot'),
+            ast: path.join(snapshotPath, '5-AST-Alignment-AST.shot'),
+            tokens: path.join(snapshotPath, '6-AST-Alignment-Tokens.shot'),
           },
         },
         error: {
