@@ -5,3 +5,7 @@
 *.ts eol=lf
 *.tsx eol=lf
 *.yml eol=lf
+
+# force github to treat jest snapshots as JS files so we get *some* coloration rather than plain white text
+*.shot linguist-language=JavaScript
+*.snap linguist-language=JavaScript
